@@ -38,11 +38,7 @@ public class PlayerManager : MonoBehaviour
         {
             moveDirection = 1;
         }
-
-        if (!Mathf.Approximately(moveDirection, 0))
-        {
-            ActivePlayer.Move();
-        }
+        ActivePlayer.Move(moveDirection);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

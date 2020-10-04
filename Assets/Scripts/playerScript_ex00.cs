@@ -6,13 +6,13 @@ public class playerScript_ex00 : MonoBehaviour
 {
     public static playerScript_ex00 ActivePlayer { get; private set; }
 
+    [SerializeField] private bool defaultPlayer;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private KeyCode key;
 
     private Rigidbody2D _rigidbody2D;
 
-    // private float _currentVerticalVelocity;
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class playerScript_ex00 : MonoBehaviour
 
     private void Start()
     {
-        if (!ActivePlayer)
+        if (defaultPlayer)
         {
             ActivePlayer = this;
         }
@@ -42,26 +42,24 @@ public class playerScript_ex00 : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        var moveDirection = 0f;
+        var velocity = _rigidbody2D.velocity;
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            moveDirection = -1;
+            velocity.x = -moveSpeed;
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            moveDirection = 1;
+            velocity.x = moveSpeed;
         }
-
-        if (!Mathf.Approximately(moveDirection, 0))
+        else
         {
-            _rigidbody2D.MovePosition(_rigidbody2D.position + Time.deltaTime * moveSpeed * moveDirection * Vector2.right);
+            velocity.x = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var velocity = _rigidbody2D.velocity;
             velocity.y = jumpPower;
-            _rigidbody2D.velocity = velocity * Time.fixedDeltaTime;
         }
+        _rigidbody2D.velocity = velocity;
     }
 }
